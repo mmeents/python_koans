@@ -4,3 +4,6 @@
 answers
 .hg
 .idea
+.vs
+.vscode
+__pycache__

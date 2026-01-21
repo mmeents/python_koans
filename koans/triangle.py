@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+﻿#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 # Triangle Project Code.
@@ -17,8 +17,21 @@
 #   about_triangle_project_2.py
 #
 def triangle(a, b, c):
-    # DELETE 'PASS' AND WRITE THIS CODE
-    pass
+    # Validate that all sides are greater than 0
+    if a <= 0 or b <= 0 or c <= 0:
+        raise TriangleError("All sides must be greater than 0")
+    
+    # Validate triangle inequality: sum of any two sides must be greater than the third
+    if a + b <= c or a + c <= b or b + c <= a:
+        raise TriangleError("Sum of any two sides must be greater than the third")
+    
+    # Determine triangle type
+    if a == b == c:
+        return 'equilateral'
+    elif a == b or b == c or a == c:
+        return 'isosceles'
+    else:
+        return 'scalene'
 
 # Error class used in part 2.  No need to change this code.
 class TriangleError(Exception):

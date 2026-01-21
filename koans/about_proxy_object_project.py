@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+﻿#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 # Project: Create a Proxy Class
@@ -20,12 +20,32 @@ from runner.koan import *
 
 class Proxy:
     def __init__(self, target_object):
-        # WRITE CODE HERE
-
+        # Use object.__setattr__ to avoid triggering __setattr__ during init
+        object.__setattr__(self, '_messages', [])
+        
         #initialize '_obj' attribute last. Trust me on this!
-        self._obj = target_object
+        object.__setattr__(self, '_obj', target_object)
 
-    # WRITE CODE HERE
+    def __getattr__(self, attr_name):
+        # Record the attribute access
+        self._messages.append(attr_name)
+        # Forward to the wrapped object
+        return getattr(self._obj, attr_name)
+    
+    def __setattr__(self, attr_name, value):
+        # Record the attribute access
+        object.__getattribute__(self, '_messages').append(attr_name)
+        # Forward to the wrapped object
+        setattr(object.__getattribute__(self, '_obj'), attr_name, value)
+    
+    def messages(self):
+        return object.__getattribute__(self, '_messages')
+    
+    def was_called(self, method_name):
+        return method_name in object.__getattribute__(self, '_messages')
+    
+    def number_of_times_called(self, method_name):
+        return object.__getattribute__(self, '_messages').count(method_name)
 
 # The proxy object should pass the following Koan:
 #

@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+﻿#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 from runner.koan import *
@@ -33,8 +33,27 @@ from runner.koan import *
 # Your goal is to write the score method.
 
 def score(dice):
-    # You need to write this method
-    pass
+    total = 0
+    counts = {}
+    
+    # Count occurrences of each die value
+    for die in dice:
+        counts[die] = counts.get(die, 0) + 1
+    
+    # Score triples first
+    for value, count in counts.items():
+        if count >= 3:
+            if value == 1:
+                total += 1000
+            else:
+                total += value * 100
+            counts[value] -= 3
+    
+    # Score remaining 1s and 5s
+    total += counts.get(1, 0) * 100
+    total += counts.get(5, 0) * 50
+    
+    return total
 
 class AboutScoringProject(Koan):
     def test_score_of_an_empty_list_is_zero(self):
